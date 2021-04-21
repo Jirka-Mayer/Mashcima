@@ -6,3 +6,7 @@
 /build/
 /dist/
 *.egg-info
+
+# python
+__pycache__
+*.pyc
