@@ -1,4 +1,4 @@
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.canvas_items.CanvasItem import CanvasItem
 from mashcima.DurationDots import DurationDots
 from typing import Optional, Dict, List
@@ -35,24 +35,24 @@ class Rest(CanvasItem):
             self.sprites.padding_left += 20
             self.sprites.padding_right += 20
 
-    def select_sprites(self, mc: Mashcima):
+    def select_sprites(self, repo: SymbolRepository):
         if self.kind == "lr":
-            self.sprites = copy.deepcopy(random.choice(mc.LONGA_RESTS))
+            self.sprites = copy.deepcopy(random.choice(repo.LONGA_RESTS))
         if self.kind == "br":
-            self.sprites = copy.deepcopy(random.choice(mc.BREVE_RESTS))
+            self.sprites = copy.deepcopy(random.choice(repo.BREVE_RESTS))
         if self.kind == "wr":
-            self.sprites = copy.deepcopy(random.choice(mc.WHOLE_RESTS))
+            self.sprites = copy.deepcopy(random.choice(repo.WHOLE_RESTS))
         if self.kind == "hr":
-            self.sprites = copy.deepcopy(random.choice(mc.HALF_RESTS))
+            self.sprites = copy.deepcopy(random.choice(repo.HALF_RESTS))
         if self.kind == "qr":
-            self.sprites = copy.deepcopy(random.choice(mc.QUARTER_RESTS))
+            self.sprites = copy.deepcopy(random.choice(repo.QUARTER_RESTS))
         if self.kind == "er":
-            self.sprites = copy.deepcopy(random.choice(mc.EIGHTH_RESTS))
+            self.sprites = copy.deepcopy(random.choice(repo.EIGHTH_RESTS))
         if self.kind == "sr":
-            self.sprites = copy.deepcopy(random.choice(mc.SIXTEENTH_RESTS))
+            self.sprites = copy.deepcopy(random.choice(repo.SIXTEENTH_RESTS))
 
-        self.duration_dots.select_sprites(mc)
-        super().select_sprites(mc)
+        self.duration_dots.select_sprites(repo)
+        super().select_sprites(repo)
 
     def place_sprites(self):
         self.duration_dots.place_sprites()

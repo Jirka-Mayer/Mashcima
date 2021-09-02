@@ -1,4 +1,4 @@
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.Sprite import Sprite
 from mashcima.SpriteGroup import SpriteGroup
 from mashcima.debug import show_images
@@ -6,7 +6,7 @@ from typing import List
 import numpy as np
 
 
-# mc = Mashcima([
+# repo = SymbolRepository([
 #     "CVC-MUSCIMA_W-01_N-10_D-ideal.xml",
 #     "CVC-MUSCIMA_W-01_N-14_D-ideal.xml",
 #     "CVC-MUSCIMA_W-01_N-19_D-ideal.xml",
@@ -15,7 +15,7 @@ import numpy as np
 #     # "CVC-MUSCIMA_W-02_N-13_D-ideal.xml",
 #     # "CVC-MUSCIMA_W-02_N-17_D-ideal.xml",
 # ])
-mc = Mashcima(use_cache=True)
+repo = SymbolRepository(use_cache=True)
 
 
 def inspect(items: List):
@@ -49,7 +49,7 @@ def inspect(items: List):
 #     f.write(str(-s.x) + " " + str(-s.y))
 
 
-inspect(mc.WHOLE_NOTES)
+inspect(repo.WHOLE_NOTES)
 # inspect(mc.HALF_NOTES)
 # inspect(mc.QUARTER_NOTES)
 # inspect(mc.EIGHTH_NOTES)

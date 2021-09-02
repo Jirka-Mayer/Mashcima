@@ -1,5 +1,5 @@
 import numpy as np
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 import matplotlib.pyplot as plt
 from mashcima.Canvas import Canvas
 import random
@@ -7,12 +7,12 @@ from mashcima.annotation_to_image import annotation_to_canvas
 from mashcima.vocabulary import PITCHES
 
 
-mc = Mashcima([
+repo = SymbolRepository([
     "CVC-MUSCIMA_W-01_N-10_D-ideal.xml",
     "CVC-MUSCIMA_W-01_N-14_D-ideal.xml",
     "CVC-MUSCIMA_W-01_N-19_D-ideal.xml",
 ])
-# mc = Mashcima(use_cache=True)
+# repo = SymbolRepository(use_cache=True)
 
 
 def inspect(generator, samples=10):
@@ -22,7 +22,7 @@ def inspect(generator, samples=10):
 
         generator(canvas)
 
-        img = canvas.render(mc)
+        img = canvas.render(repo)
         annotation = " ".join(canvas.get_annotations())
 
         print(annotation)

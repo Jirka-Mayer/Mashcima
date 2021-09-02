@@ -1,5 +1,5 @@
 from typing import List, Optional, Dict
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.canvas_items.CanvasItem import CanvasItem
 from mashcima.canvas_items.SlurableItem import SlurableItem
 from mashcima.canvas_items.InvisibleSlurEnd import InvisibleSlurEnd
@@ -115,12 +115,12 @@ class Canvas:
             end = create_invisible_slur_end(self.items.index(start) + 1, False)
             add_slur(start, end)
 
-    def render(self, mc: Mashcima):
+    def render(self, repo: SymbolRepository):
         """Simple rendering that creates a single cropped staff"""
         from mashcima.generate_staff_lines import generate_staff_lines
         img, pitch_positions = generate_staff_lines()
         head = self.render_onto_image(
-            mc,
+            repo,
             img,
             pitch_positions,
             0
@@ -133,7 +133,7 @@ class Canvas:
 
     def render_onto_image(
             self,
-            mc: Mashcima,
+            repo: SymbolRepository,
             img: np.ndarray,
             pitch_positions: Dict[int, int],
             head_start: int
@@ -144,7 +144,7 @@ class Canvas:
 
         # select sprites
         for item in self.items:
-            item.select_sprites(mc)
+            item.select_sprites(repo)
 
         # place sprites and place items
         head = self._place_items(pitch_positions, head_start)

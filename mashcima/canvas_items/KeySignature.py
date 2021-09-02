@@ -1,4 +1,4 @@
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.canvas_items.CanvasItem import CanvasItem
 from mashcima.Sprite import Sprite
 import random
@@ -24,19 +24,19 @@ class KeySignature(CanvasItem):
             tokens.append(self.types[i] + str(self.pitches[i]))
         return tokens
 
-    def select_sprites(self, mc: Mashcima):
+    def select_sprites(self, repo: SymbolRepository):
         for i, t in enumerate(self.types):
             s = None
             if t == "#":
-                s = copy.deepcopy(random.choice(mc.SHARPS))
+                s = copy.deepcopy(random.choice(repo.SHARPS))
             if t == "b":
-                s = copy.deepcopy(random.choice(mc.FLATS))
+                s = copy.deepcopy(random.choice(repo.FLATS))
             if t == "N":
-                s = copy.deepcopy(random.choice(mc.NATURALS))
+                s = copy.deepcopy(random.choice(repo.NATURALS))
             assert s is not None
             self.sprites.add("item_" + str(i), s)
             self.item_sprites.append(s)
-        super().select_sprites(mc)
+        super().select_sprites(repo)
 
     def place_item(self, head: int, pitch_positions: Dict[int, int]) -> int:
         self.sprites.position_x = head

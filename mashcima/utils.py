@@ -1,5 +1,5 @@
 from muscima.io import CropObject
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 import cv2
 import numpy as np
 from typing import List, Tuple
@@ -11,17 +11,17 @@ def fork(label: str, stay_probability: float):
     return random.random() <= stay_probability
 
 
-def get_outlink_to(mc: Mashcima, obj: CropObject, clsname: str) -> CropObject:
+def get_outlink_to(repo: SymbolRepository, obj: CropObject, clsname: str) -> CropObject:
     for l in obj.outlinks:
-        resolved_link = mc.CROP_OBJECT_LOOKUP_DICTS[obj.doc][l]
+        resolved_link = repo.CROP_OBJECT_LOOKUP_DICTS[obj.doc][l]
         if resolved_link.clsname == clsname:
             return resolved_link
     raise Exception("Object has no outlink of requested clsname")
 
 
-def has_outlink_to(mc: Mashcima, obj: CropObject, clsname: str) -> bool:
+def has_outlink_to(repo: SymbolRepository, obj: CropObject, clsname: str) -> bool:
     for l in obj.outlinks:
-        resolved_link = mc.CROP_OBJECT_LOOKUP_DICTS[obj.doc][l]
+        resolved_link = repo.CROP_OBJECT_LOOKUP_DICTS[obj.doc][l]
         if resolved_link.clsname == clsname:
             return True
     return False

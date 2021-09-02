@@ -1,4 +1,4 @@
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.canvas_items.Note import Note
 from mashcima.debug import draw_cross
 import numpy as np
@@ -21,8 +21,8 @@ class StemNote(Note):
     def stem_head_y(self):
         return self.sprites.point("stem_head")[1]
 
-    def select_sprites(self, mc: Mashcima):
-        super().select_sprites(mc)
+    def select_sprites(self, repo: SymbolRepository):
+        super().select_sprites(repo)
 
         # decide whether to flip or not
         self.flipped = self.pitch > 0

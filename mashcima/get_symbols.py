@@ -3,7 +3,7 @@ from mashcima.utils import has_outlink_to, get_outlink_to
 from mashcima.utils import get_connected_components_not_touching_image_border
 from mashcima.utils import sort_components_by_proximity_to_point
 from mashcima.utils import get_center_of_component
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.Sprite import Sprite
 from mashcima.SpriteGroup import SpriteGroup
 from typing import List, Tuple, Dict
@@ -84,18 +84,18 @@ def _build_notehead_stem_pairs(noteheads, stems, flags8=None, flags16=None):
 
 
 def _get_y_position_of_staff_line(
-        mc: Mashcima,
+        repo: SymbolRepository,
         obj: CropObject,
         line_from_top: int = 0
 ):
     """
     Given a CropObject it finds the y-coordinate of the corresponding staff line
     """
-    staff = get_outlink_to(mc, obj, "staff")
+    staff = get_outlink_to(repo, obj, "staff")
     staff_line = None
     line = 0
     for l in staff.outlinks:
-        resolved_link = mc.CROP_OBJECT_LOOKUP_DICTS[obj.doc][l]
+        resolved_link = repo.CROP_OBJECT_LOOKUP_DICTS[obj.doc][l]
         if resolved_link.clsname == "staff_line":
             if line == line_from_top:  # counted from top, from zero
                 staff_line = resolved_link
@@ -106,7 +106,7 @@ def _get_y_position_of_staff_line(
 
 
 def _get_symbols_centered_on_line(
-        mc: Mashcima,
+        repo: SymbolRepository,
         clsname: str,
         sprite_name: str,
         line_index: int,
@@ -116,7 +116,7 @@ def _get_symbols_centered_on_line(
     Returns list of symbols with given clsname centered on given line index
     """
     crop_objects = [
-        o for o in mc.CROP_OBJECTS
+        o for o in repo.CROP_OBJECTS
         if o.clsname in [clsname]
     ]
 
@@ -125,7 +125,7 @@ def _get_symbols_centered_on_line(
         item = SpriteGroup()
         sprite = Sprite(
             -o.width // 2,
-            o.top - _get_y_position_of_staff_line(mc, o, line_from_top=line_index),
+            o.top - _get_y_position_of_staff_line(repo, o, line_from_top=line_index),
             o.mask
         )
         item.add(sprite_name, sprite)
@@ -142,11 +142,11 @@ def _get_symbols_centered_on_line(
 ################################################
 
 
-def get_whole_notes(mc: Mashcima) -> List[SpriteGroup]:
+def get_whole_notes(repo: SymbolRepository) -> List[SpriteGroup]:
     crop_objects = [
-        o for o in mc.CROP_OBJECTS
+        o for o in repo.CROP_OBJECTS
         if o.clsname == "notehead-empty"
-        and not has_outlink_to(mc, o, "ledger_line")
+        and not has_outlink_to(repo, o, "ledger_line")
     ]
 
     items = []
@@ -162,57 +162,57 @@ def get_whole_notes(mc: Mashcima) -> List[SpriteGroup]:
     return items
 
 
-def get_half_notes(mc: Mashcima) -> List[SpriteGroup]:
+def get_half_notes(repo: SymbolRepository) -> List[SpriteGroup]:
     noteheads = [
-        o for o in mc.CROP_OBJECTS
+        o for o in repo.CROP_OBJECTS
         if o.clsname == "notehead-empty"
-        and has_outlink_to(mc, o, "stem")
-        and not has_outlink_to(mc, o, "ledger_line")
+        and has_outlink_to(repo, o, "stem")
+        and not has_outlink_to(repo, o, "ledger_line")
     ]
-    stems = [get_outlink_to(mc, o, "stem") for o in noteheads]
+    stems = [get_outlink_to(repo, o, "stem") for o in noteheads]
     return _build_notehead_stem_pairs(noteheads, stems)
 
 
-def get_quarter_notes(mc: Mashcima) -> List[SpriteGroup]:
+def get_quarter_notes(repo: SymbolRepository) -> List[SpriteGroup]:
     noteheads = [
-        o for o in mc.CROP_OBJECTS
+        o for o in repo.CROP_OBJECTS
         if o.clsname == "notehead-full"
-        and has_outlink_to(mc, o, "stem")
+        and has_outlink_to(repo, o, "stem")
     ]
-    stems = [get_outlink_to(mc, o, "stem") for o in noteheads]
+    stems = [get_outlink_to(repo, o, "stem") for o in noteheads]
     return _build_notehead_stem_pairs(noteheads, stems)
 
 
-def get_eighth_notes(mc: Mashcima) -> List[SpriteGroup]:
+def get_eighth_notes(repo: SymbolRepository) -> List[SpriteGroup]:
     noteheads = [
-        o for o in mc.CROP_OBJECTS
+        o for o in repo.CROP_OBJECTS
         if o.clsname == "notehead-full"
-           and has_outlink_to(mc, o, "stem")
-           and has_outlink_to(mc, o, "8th_flag")
+           and has_outlink_to(repo, o, "stem")
+           and has_outlink_to(repo, o, "8th_flag")
     ]
-    stems = [get_outlink_to(mc, o, "stem") for o in noteheads]
-    flags = [get_outlink_to(mc, o, "8th_flag") for o in noteheads]
+    stems = [get_outlink_to(repo, o, "stem") for o in noteheads]
+    flags = [get_outlink_to(repo, o, "8th_flag") for o in noteheads]
     return _build_notehead_stem_pairs(noteheads, stems, flags)
 
 
-def get_sixteenth_notes(mc: Mashcima) -> List[SpriteGroup]:
+def get_sixteenth_notes(repo: SymbolRepository) -> List[SpriteGroup]:
     noteheads = [
-        o for o in mc.CROP_OBJECTS
+        o for o in repo.CROP_OBJECTS
         if o.clsname == "notehead-full"
-           and has_outlink_to(mc, o, "stem")
-           and has_outlink_to(mc, o, "8th_flag")
-           and has_outlink_to(mc, o, "16th_flag")
+           and has_outlink_to(repo, o, "stem")
+           and has_outlink_to(repo, o, "8th_flag")
+           and has_outlink_to(repo, o, "16th_flag")
     ]
-    stems = [get_outlink_to(mc, o, "stem") for o in noteheads]
-    flags8 = [get_outlink_to(mc, o, "8th_flag") for o in noteheads]
-    flags16 = [get_outlink_to(mc, o, "16th_flag") for o in noteheads]
+    stems = [get_outlink_to(repo, o, "stem") for o in noteheads]
+    flags8 = [get_outlink_to(repo, o, "8th_flag") for o in noteheads]
+    flags16 = [get_outlink_to(repo, o, "16th_flag") for o in noteheads]
     return _build_notehead_stem_pairs(noteheads, stems, flags8, flags16)
 
 
-def get_longa_rests(mc: Mashcima) -> List[SpriteGroup]:
+def get_longa_rests(repo: SymbolRepository) -> List[SpriteGroup]:
     HEIGHT_THRESHOLD = 44  # split longas from breves
     rests = _get_symbols_centered_on_line(
-        mc,
+        repo,
         clsname="multi-measure_rest",
         sprite_name="rest",
         line_index=2
@@ -220,10 +220,10 @@ def get_longa_rests(mc: Mashcima) -> List[SpriteGroup]:
     return list(filter(lambda r: r.sprite("rest").height > HEIGHT_THRESHOLD, rests))
 
 
-def get_breve_rests(mc: Mashcima) -> List[SpriteGroup]:
+def get_breve_rests(repo: SymbolRepository) -> List[SpriteGroup]:
     HEIGHT_THRESHOLD = 44  # split longas from breves
     rests = _get_symbols_centered_on_line(
-        mc,
+        repo,
         clsname="multi-measure_rest",
         sprite_name="rest",
         line_index=2
@@ -231,7 +231,7 @@ def get_breve_rests(mc: Mashcima) -> List[SpriteGroup]:
     return list(filter(lambda r: r.sprite("rest").height <= HEIGHT_THRESHOLD, rests))
 
 
-def get_whole_rests(mc: Mashcima) -> List[SpriteGroup]:
+def get_whole_rests(mc: SymbolRepository) -> List[SpriteGroup]:
     rests = _get_symbols_centered_on_line(
         mc,
         clsname="whole_rest",
@@ -245,9 +245,9 @@ def get_whole_rests(mc: Mashcima) -> List[SpriteGroup]:
     return rests
 
 
-def get_half_rests(mc: Mashcima) -> List[SpriteGroup]:
+def get_half_rests(repo: SymbolRepository) -> List[SpriteGroup]:
     rests = _get_symbols_centered_on_line(
-        mc,
+        repo,
         clsname="half_rest",
         sprite_name="rest",
         line_index=2
@@ -259,9 +259,9 @@ def get_half_rests(mc: Mashcima) -> List[SpriteGroup]:
     return rests
 
 
-def get_quarter_rests(mc: Mashcima) -> List[SpriteGroup]:
+def get_quarter_rests(repo: SymbolRepository) -> List[SpriteGroup]:
     return _get_symbols_centered_on_line(
-        mc,
+        repo,
         clsname="quarter_rest",
         sprite_name="rest",
         line_index=2,
@@ -269,9 +269,9 @@ def get_quarter_rests(mc: Mashcima) -> List[SpriteGroup]:
     )
 
 
-def get_eighth_rests(mc: Mashcima) -> List[SpriteGroup]:
+def get_eighth_rests(repo: SymbolRepository) -> List[SpriteGroup]:
     return _get_symbols_centered_on_line(
-        mc,
+        repo,
         clsname="8th_rest",
         sprite_name="rest",
         line_index=2,
@@ -279,9 +279,9 @@ def get_eighth_rests(mc: Mashcima) -> List[SpriteGroup]:
     )
 
 
-def get_sixteenth_rests(mc: Mashcima) -> List[SpriteGroup]:
+def get_sixteenth_rests(repo: SymbolRepository) -> List[SpriteGroup]:
     return _get_symbols_centered_on_line(
-        mc,
+        repo,
         clsname="16th_rest",
         sprite_name="rest",
         line_index=2,
@@ -289,9 +289,9 @@ def get_sixteenth_rests(mc: Mashcima) -> List[SpriteGroup]:
     )
 
 
-def get_accidentals(mc: Mashcima) -> Tuple[List[Sprite], List[Sprite], List[Sprite]]:
+def get_accidentals(repo: SymbolRepository) -> Tuple[List[Sprite], List[Sprite], List[Sprite]]:
     crop_objects = [
-        o for o in mc.CROP_OBJECTS
+        o for o in repo.CROP_OBJECTS
         if o.clsname in ["sharp", "flat", "natural"]
     ]
 
@@ -333,7 +333,7 @@ def get_accidentals(mc: Mashcima) -> Tuple[List[Sprite], List[Sprite], List[Spri
 
         # if it didn't succeed, try pulling the center out by the attached note
         if sprite is None and len(o.inlinks) == 1:
-            link = mc.CROP_OBJECT_LOOKUP_DICTS[o.doc][o.inlinks[0]]
+            link = repo.CROP_OBJECT_LOOKUP_DICTS[o.doc][o.inlinks[0]]
             if "notehead" in link.clsname:
                 sprite = Sprite(
                     -o.width // 2,
@@ -366,9 +366,9 @@ def get_accidentals(mc: Mashcima) -> Tuple[List[Sprite], List[Sprite], List[Spri
     return sharps, flats, naturals
 
 
-def get_dots(mc: Mashcima) -> List[Sprite]:
+def get_dots(repo: SymbolRepository) -> List[Sprite]:
     crop_objects = [
-        o for o in mc.CROP_OBJECTS
+        o for o in repo.CROP_OBJECTS
         if o.clsname in ["duration-dot", "staccato-dot", "other-dot"]
     ]
 
@@ -384,9 +384,9 @@ def get_dots(mc: Mashcima) -> List[Sprite]:
     return dots
 
 
-def get_ledger_lines(mc: Mashcima) -> List[Sprite]:
+def get_ledger_lines(repo: SymbolRepository) -> List[Sprite]:
     crop_objects = [
-        o for o in mc.CROP_OBJECTS
+        o for o in repo.CROP_OBJECTS
         if o.clsname in ["ledger_line"]
     ]
 
@@ -405,11 +405,11 @@ def get_ledger_lines(mc: Mashcima) -> List[Sprite]:
     return lines
 
 
-def get_barlines(mc: Mashcima) -> Tuple[List[SpriteGroup], List[SpriteGroup]]:
+def get_barlines(repo: SymbolRepository) -> Tuple[List[SpriteGroup], List[SpriteGroup]]:
     TALL_BARLINE_THRESHOLD = 150
 
     crop_objects = [
-        o for o in mc.CROP_OBJECTS
+        o for o in repo.CROP_OBJECTS
         if o.clsname in ["thin_barline"]
     ]
 
@@ -431,27 +431,27 @@ def get_barlines(mc: Mashcima) -> Tuple[List[SpriteGroup], List[SpriteGroup]]:
     )
 
 
-def get_g_clefs(mc: Mashcima) -> List[SpriteGroup]:
+def get_g_clefs(repo: SymbolRepository) -> List[SpriteGroup]:
     return _get_symbols_centered_on_line(
-        mc,
+        repo,
         clsname="g-clef",
         sprite_name="clef",
         line_index=3
     )
 
 
-def get_f_clefs(mc: Mashcima) -> List[SpriteGroup]:
+def get_f_clefs(repo: SymbolRepository) -> List[SpriteGroup]:
     return _get_symbols_centered_on_line(
-        mc,
+        repo,
         clsname="f-clef",
         sprite_name="clef",
         line_index=1
     )
 
 
-def get_c_clefs(mc: Mashcima) -> List[SpriteGroup]:
+def get_c_clefs(repo: SymbolRepository) -> List[SpriteGroup]:
     crop_objects = [
-        o for o in mc.CROP_OBJECTS
+        o for o in repo.CROP_OBJECTS
         if o.clsname in ["c-clef"]
     ]
 
@@ -468,9 +468,9 @@ def get_c_clefs(mc: Mashcima) -> List[SpriteGroup]:
     return items
 
 
-def get_time_marks(mc: Mashcima) -> Dict[str, List[SpriteGroup]]:
+def get_time_marks(repo: SymbolRepository) -> Dict[str, List[SpriteGroup]]:
     crop_objects = [
-        o for o in mc.CROP_OBJECTS
+        o for o in repo.CROP_OBJECTS
         if o.clsname in ["time_signature"]
     ]
 
@@ -504,7 +504,7 @@ def get_time_marks(mc: Mashcima) -> Dict[str, List[SpriteGroup]]:
 
     for o in crop_objects:
         for l in o.outlinks:
-            outlink = mc.CROP_OBJECT_LOOKUP_DICTS[o.doc][l]
+            outlink = repo.CROP_OBJECT_LOOKUP_DICTS[o.doc][l]
             if outlink.clsname == "staff":
                 continue
             item = SpriteGroup()

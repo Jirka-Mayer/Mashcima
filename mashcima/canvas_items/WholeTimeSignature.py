@@ -1,4 +1,4 @@
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.canvas_items.CanvasItem import CanvasItem
 import random
 import copy
@@ -19,9 +19,9 @@ class WholeTimeSignature(CanvasItem):
         else:
             return "time.C"
 
-    def select_sprites(self, mc: Mashcima):
-        self.sprites = copy.deepcopy(random.choice(mc.TIME_MARKS["time_c"]))
-        super().select_sprites(mc)
+    def select_sprites(self, repo: SymbolRepository):
+        self.sprites = copy.deepcopy(random.choice(repo.TIME_MARKS["time_c"]))
+        super().select_sprites(repo)
 
     def place_item(self, head: int, pitch_positions: Dict[int, int]) -> int:
         out = super().place_item(head, pitch_positions)

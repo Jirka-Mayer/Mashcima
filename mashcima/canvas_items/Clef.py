@@ -1,4 +1,4 @@
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.canvas_items.CanvasItem import CanvasItem
 import copy
 import random
@@ -25,14 +25,14 @@ class Clef(CanvasItem):
     def get_item_annotation_token(self) -> str:
         return "clef." + self.clef + str(self.pitch)
 
-    def select_sprites(self, mc: Mashcima):
+    def select_sprites(self, repo: SymbolRepository):
         if self.clef == "G":
-            self.sprites = copy.deepcopy(random.choice(mc.G_CLEFS))
+            self.sprites = copy.deepcopy(random.choice(repo.G_CLEFS))
         if self.clef == "F":
-            self.sprites = copy.deepcopy(random.choice(mc.F_CLEFS))
+            self.sprites = copy.deepcopy(random.choice(repo.F_CLEFS))
         if self.clef == "C":
-            self.sprites = copy.deepcopy(random.choice(mc.C_CLEFS))
-        super().select_sprites(mc)
+            self.sprites = copy.deepcopy(random.choice(repo.C_CLEFS))
+        super().select_sprites(repo)
 
     def place_item(self, head: int, pitch_positions: Dict[int, int]) -> int:
         out = super().place_item(head, pitch_positions)

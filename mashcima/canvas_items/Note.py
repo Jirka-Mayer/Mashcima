@@ -1,4 +1,4 @@
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.canvas_items.SlurableItem import SlurableItem
 from mashcima.Sprite import Sprite
 from typing import Dict, List, Tuple, Optional
@@ -55,11 +55,11 @@ class Note(SlurableItem):
             tokens = ["."] + tokens
         return tokens
 
-    def select_sprites(self, mc: Mashcima):
-        self._select_ledger_line_sprites(mc)
-        self._select_accidental_sprite(mc)
-        self.duration_dots.select_sprites(mc)
-        self._select_staccacto_dot_sprite(mc)
+    def select_sprites(self, repo: SymbolRepository):
+        self._select_ledger_line_sprites(repo)
+        self._select_accidental_sprite(repo)
+        self.duration_dots.select_sprites(repo)
+        self._select_staccacto_dot_sprite(repo)
 
     def place_sprites(self):
         self._place_accidental()
@@ -89,10 +89,10 @@ class Note(SlurableItem):
                 self._ledger_line_y_positions[i]
             )
 
-    def _select_ledger_line_sprites(self, mc: Mashcima):
+    def _select_ledger_line_sprites(self, repo: SymbolRepository):
         self._ledger_line_sprites = []
         for p in self._iterate_ledger_line_pitches():
-            self._ledger_line_sprites.append(random.choice(mc.LEDGER_LINES))
+            self._ledger_line_sprites.append(random.choice(repo.LEDGER_LINES))
 
     def _place_ledger_lines(self, pitch_positions: Dict[int, int]):
         self._ledger_line_y_positions = []
@@ -112,16 +112,16 @@ class Note(SlurableItem):
     # Accidental rendering #
     ########################
 
-    def _select_accidental_sprite(self, mc: Mashcima):
+    def _select_accidental_sprite(self, repo: SymbolRepository):
         if self.accidental is None:
             return
         sprite = None
         if self.accidental == "#":
-            sprite = copy.deepcopy(random.choice(mc.SHARPS))
+            sprite = copy.deepcopy(random.choice(repo.SHARPS))
         if self.accidental == "b":
-            sprite = copy.deepcopy(random.choice(mc.FLATS))
+            sprite = copy.deepcopy(random.choice(repo.FLATS))
         if self.accidental == "N":
-            sprite = copy.deepcopy(random.choice(mc.NATURALS))
+            sprite = copy.deepcopy(random.choice(repo.NATURALS))
         assert sprite is not None
         self.sprites.add("accidental", sprite)
 
@@ -138,10 +138,10 @@ class Note(SlurableItem):
     # Staccato dot rendering #
     ##########################
 
-    def _select_staccacto_dot_sprite(self, mc: Mashcima):
+    def _select_staccacto_dot_sprite(self, repo: SymbolRepository):
         if not self.staccato:
             return
-        self.sprites.add("staccato", copy.deepcopy(random.choice(mc.DOTS)))
+        self.sprites.add("staccato", copy.deepcopy(random.choice(repo.DOTS)))
 
     def _place_staccato_dot(self):
         if not self.staccato:

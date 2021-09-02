@@ -4,7 +4,7 @@ from mashcima.vocabulary import get_pitch, to_generic
 from mashcima.vocabulary import is_accidental
 from mashcima.vocabulary import parse_annotation_into_token_groups
 from mashcima.vocabulary import KeySignatureTokenGroup, TimeSignatureTokenGroup, TokenGroup
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.Canvas import Canvas
 from mashcima.canvas_items.Barline import Barline
 from mashcima.canvas_items.Clef import Clef
@@ -119,19 +119,19 @@ def annotation_to_canvas(canvas: Canvas, annotation: str, print_warnings=True):
         assert given_annotation == generated_annotation  # kill the program
 
 
-def annotation_to_image(mc: Mashcima, annotation: str) -> np.ndarray:
+def annotation_to_image(repo: SymbolRepository, annotation: str) -> np.ndarray:
     """Generates an image from an annotation string"""
     canvas = Canvas()
 
     annotation_to_canvas(canvas, annotation)
 
-    img = canvas.render(mc)
+    img = canvas.render(repo)
 
     return img
 
 
 def multi_staff_annotation_to_image(
-        mc: Mashcima,
+        repo: SymbolRepository,
         main_annotation: str,
         above_annotation: Optional[str],
         below_annotation: Optional[str],
@@ -170,7 +170,7 @@ def multi_staff_annotation_to_image(
         canvas.options.barlines_down = False
         annotation_to_canvas(canvas, above_annotation)
         canvas.render_onto_image(
-            mc, img,
+            repo, img,
             {pitch: y + staff_height * 1 for pitch, y in pitch_positions.items()},
             head_start=0
         )
@@ -181,7 +181,7 @@ def multi_staff_annotation_to_image(
     canvas.options.barlines_down = below_annotation is not None
     annotation_to_canvas(canvas, main_annotation)
     head_end = canvas.render_onto_image(
-        mc, img,
+        repo, img,
         {pitch: y + staff_height * 3 for pitch, y in pitch_positions.items()},
         head_start=0
     )
@@ -193,7 +193,7 @@ def multi_staff_annotation_to_image(
         canvas.options.barlines_down = False
         annotation_to_canvas(canvas, below_annotation)
         canvas.render_onto_image(
-            mc, img,
+            repo, img,
             {pitch: y + staff_height * 5 for pitch, y in pitch_positions.items()},
             head_start=0
         )

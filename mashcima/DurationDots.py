@@ -1,5 +1,5 @@
 from typing import Optional, List
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.canvas_items.CanvasItem import CanvasItem
 import copy
 import random
@@ -19,12 +19,12 @@ class DurationDots:
         else:
             return []
 
-    def select_sprites(self, mc: Mashcima):
+    def select_sprites(self, repo: SymbolRepository):
         if self.token is None:
             return
-        self.item.sprites.add("duration_dot", copy.deepcopy(random.choice(mc.DOTS)))
+        self.item.sprites.add("duration_dot", copy.deepcopy(random.choice(repo.DOTS)))
         if self.token == "**":
-            self.item.sprites.add("duration_dot_2", copy.deepcopy(random.choice(mc.DOTS)))
+            self.item.sprites.add("duration_dot_2", copy.deepcopy(random.choice(repo.DOTS)))
 
     def place_sprites(self):
         from mashcima.canvas_items.Note import Note  # prevent cyclic dependency

@@ -1,4 +1,4 @@
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.canvas_items.QuarterNote import QuarterNote
 import copy
 
@@ -38,8 +38,8 @@ class BeamedNote(QuarterNote):
             token += "="
         return token
 
-    def select_sprites(self, mc: Mashcima):
-        super().select_sprites(mc)
+    def select_sprites(self, repo: SymbolRepository):
+        super().select_sprites(repo)
 
         # override flip -> pull it from the beam
         self.flipped = self.beam.flipped

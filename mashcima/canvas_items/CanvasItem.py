@@ -1,4 +1,4 @@
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 import numpy as np
 import cv2
 from typing import List, Dict
@@ -33,7 +33,7 @@ class CanvasItem:
     def get_after_attachment_tokens(self) -> List[str]:
         return []
 
-    def select_sprites(self, mc: Mashcima):
+    def select_sprites(self, repo: SymbolRepository):
         pass
 
     def place_sprites(self):

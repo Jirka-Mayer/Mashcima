@@ -1,4 +1,4 @@
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.canvas_items.SlurableItem import SlurableItem
 from mashcima.Sprite import Sprite
 import random
@@ -18,12 +18,12 @@ class Barline(SlurableItem):
     def get_item_annotation_token(self):
         return "|"
 
-    def select_sprites(self, mc: Mashcima):
+    def select_sprites(self, repo: SymbolRepository):
         if not self.up and not self.down:
-            self.sprites = copy.deepcopy(random.choice(mc.BAR_LINES))
+            self.sprites = copy.deepcopy(random.choice(repo.BAR_LINES))
         else:
-            self.sprites = copy.deepcopy(random.choice(mc.TALL_BAR_LINES))
-        super().select_sprites(mc)
+            self.sprites = copy.deepcopy(random.choice(repo.TALL_BAR_LINES))
+        super().select_sprites(repo)
 
     def place_sprites(self):
         s: Sprite = self.sprites.sprite("barline")

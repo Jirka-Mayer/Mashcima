@@ -1,4 +1,4 @@
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.canvas_items.StemNote import StemNote
 import random
 import copy
@@ -15,12 +15,12 @@ class FlagNote(StemNote):
     def get_note_generic_annotation(self) -> str:
         return self.kind
 
-    def select_sprites(self, mc: Mashcima):
+    def select_sprites(self, repo: SymbolRepository):
         if self.kind == "e":
-            self.sprites = copy.deepcopy(random.choice(mc.EIGHTH_NOTES))
+            self.sprites = copy.deepcopy(random.choice(repo.EIGHTH_NOTES))
         if self.kind == "s":
-            self.sprites = copy.deepcopy(random.choice(mc.SIXTEENTH_NOTES))
-        super().select_sprites(mc)
+            self.sprites = copy.deepcopy(random.choice(repo.SIXTEENTH_NOTES))
+        super().select_sprites(repo)
 
     def place_sprites(self):
         super().place_sprites()

@@ -1,4 +1,4 @@
-from mashcima import Mashcima
+from mashcima.SymbolRepository import SymbolRepository
 from mashcima.canvas_items.CanvasItem import CanvasItem
 import random
 import copy
@@ -18,18 +18,18 @@ class TimeSignature(CanvasItem):
             "time." + str(self.bottom)
         ]
 
-    def select_sprites(self, mc: Mashcima):
+    def select_sprites(self, repo: SymbolRepository):
         top_sprite = copy.deepcopy(
-            random.choice(mc.TIME_MARKS["time_" + str(self.top)]).sprite("symbol")
+            random.choice(repo.TIME_MARKS["time_" + str(self.top)]).sprite("symbol")
         )
         bottom_sprite = copy.deepcopy(
-            random.choice(mc.TIME_MARKS["time_" + str(self.bottom)]).sprite("symbol")
+            random.choice(repo.TIME_MARKS["time_" + str(self.bottom)]).sprite("symbol")
         )
         top_sprite.y -= top_sprite.height // 2 + random.randint(5, 10)
         bottom_sprite.y += bottom_sprite.height // 2 + random.randint(5, 10)
         self.sprites.add("top", top_sprite)
         self.sprites.add("bottom", bottom_sprite)
-        super().select_sprites(mc)
+        super().select_sprites(repo)
 
     def place_item(self, head: int, pitch_positions: Dict[int, int]) -> int:
         out = super().place_item(head, pitch_positions)
