@@ -19,3 +19,6 @@ And also: https://the-hitchhikers-guide-to-packaging.readthedocs.io/en/latest/cr
 To execute inspections: `python -m mashcima.inspections.inspect_foo` from the root folder.
 
 To play around with mashcima during development create a venv and install it like this: `pip install -e ../Mashcima` where `-e` means it will link the folder and all changes will propagate immediately.
+
+PrIMuS download: https://grfia.dlsi.ua.es/primus/packages/primusCalvoRizoAppliedSciences2018.tgz
+MUSCIMA++ download: https://lindat.mff.cuni.cz/repository/xmlui/bitstream/handle/11372/LRT-2372/MUSCIMA-pp_v1.0.zip
