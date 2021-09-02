@@ -14,3 +14,8 @@ The upper staff was synthesized by this tool, the lower is taken from the [CVC-M
 ## Notes
 
 Python packaging info: https://packaging.python.org/tutorials/packaging-projects/
+And also: https://the-hitchhikers-guide-to-packaging.readthedocs.io/en/latest/creation.html
+
+To execute inspections: `python -m mashcima.inspections.inspect_foo` from the root folder.
+
+To play around with mashcima during development create a venv and install it like this: `pip install -e ../Mashcima` where `-e` means it will link the folder and all changes will propagate immediately.
