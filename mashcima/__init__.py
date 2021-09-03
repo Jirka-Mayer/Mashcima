@@ -1,9 +1,10 @@
 from mashcima.CanvasOptions import CanvasOptions
 from mashcima.Canvas import Canvas
 from mashcima.SymbolRepository import SymbolRepository
-from mashcima.annotation_to_image import multi_staff_annotation_to_image \
-    as _multi_staff_annotation_to_image
+from mashcima.annotation_to_image import multi_staff_annotation_to_image
 from typing import Optional
+from mashcima.generate_random_annotation import generate_random_annotation
+from mashcima.primus_adapter import load_primus_as_mashcima_annotations, convert_primus_annotation_to_mashcima_annotation
 
 
 def use_only_writer_number_one():
@@ -71,7 +72,7 @@ def synthesize(
     if symbol_repository is None:
         symbol_repository = SymbolRepository.load_default()
 
-    return _multi_staff_annotation_to_image(
+    return multi_staff_annotation_to_image(
         symbol_repository,
         main_annotation=main_annotation,
         above_annotation=above_annotation,

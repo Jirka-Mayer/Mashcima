@@ -33,3 +33,23 @@ img = mc.synthesize_for_beauty(
 
 plt.imshow(img)
 plt.show()
+
+
+# Example 4:
+# Synthesize from random annotation
+img = mc.synthesize_for_beauty(
+    mc.generate_random_annotation()
+)
+
+plt.imshow(img)
+plt.show()
+
+# Example 5:
+# Loading the PrIMuS dataset
+print(mc.load_primus_as_mashcima_annotations(take=5))
+
+# Example 6:
+# Converting PrIMuS agnostic encoding to mashcima encoding
+print(mc.convert_primus_annotation_to_mashcima_annotation(
+    "clef.G-L2\taccidental.sharp-L5\taccidental.sharp-S3\tmetersign.C-L3"
+)) # prints "clef.G-2 #4 #1 time.C"
