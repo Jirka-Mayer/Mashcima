@@ -46,7 +46,15 @@ plt.show()
 
 # Example 5:
 # Loading the PrIMuS dataset
+data = mc.load_primus_as_mashcima_annotations(take=5)
 print(mc.load_primus_as_mashcima_annotations(take=5))
+
+img = mc.synthesize_for_beauty(
+    data[0]["mashcima"]
+)
+
+plt.imshow(img)
+plt.show()
 
 # Example 6:
 # Converting PrIMuS agnostic encoding to mashcima encoding
