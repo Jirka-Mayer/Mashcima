@@ -2,7 +2,7 @@ import os
 import numpy as np
 from muscima.io import parse_cropobject_list
 from typing import Tuple, Dict
-import config
+from mashcima.Config import Config
 from mashcima.vocabulary import HIGHEST_PITCH, LOWEST_PITCH
 
 
@@ -10,9 +10,12 @@ from mashcima.vocabulary import HIGHEST_PITCH, LOWEST_PITCH
 _staff_line_cache = None
 
 
-def generate_staff_lines() -> Tuple[np.ndarray, Dict[int, int]]:
+def generate_staff_lines(config=None) -> Tuple[np.ndarray, Dict[int, int]]:
     """Generates an image of a staff with pixel positions of note positions"""
     global _staff_line_cache
+
+    if config is None:
+        config = Config.load_default()
 
     if _staff_line_cache is not None:
         return _staff_line_cache[0].copy(), _staff_line_cache[1]

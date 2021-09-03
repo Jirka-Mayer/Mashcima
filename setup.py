@@ -7,6 +7,8 @@ setuptools.setup(
         'numpy>=1.11.1',
         'opencv-python>=3.4.8.29',
         'muscima>=0.10.0',
+        'appdirs>=1.4.4',
+        'tqdm>=4.40.0'
 
         # missing dependencies for the 'muscima' package
         'scipy>=1.5.4',

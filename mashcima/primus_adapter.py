@@ -1,10 +1,13 @@
 from typing import Tuple, Generator, Optional
 import tarfile
-import config
+from mashcima.Config import Config
 from mashcima.vocabulary import parse_annotation_into_token_groups
 
 
-def load_primus_as_mashcima_annotations(take=None, print_warnings=False):
+def load_primus_as_mashcima_annotations(take=None, print_warnings=False, config=None):
+    if config is None:
+        config = Config.load_default()
+    
     print("Loading Primus incipits...")
 
     ignored_count = 0

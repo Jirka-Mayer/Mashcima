@@ -147,7 +147,7 @@ def multi_staff_annotation_to_image(
     from mashcima.generate_staff_lines import generate_staff_lines
     from mashcima.transform_image import transform_image as transform_image_function
 
-    staff_img, pitch_positions = generate_staff_lines()
+    staff_img, pitch_positions = generate_staff_lines(repo.CONFIG)
     staff_height = staff_img.shape[0] // 3
     staff_width = staff_img.shape[1]
 

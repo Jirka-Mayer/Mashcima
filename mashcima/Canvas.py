@@ -118,7 +118,7 @@ class Canvas:
     def render(self, repo: SymbolRepository):
         """Simple rendering that creates a single cropped staff"""
         from mashcima.generate_staff_lines import generate_staff_lines
-        img, pitch_positions = generate_staff_lines()
+        img, pitch_positions = generate_staff_lines(repo.CONFIG)
         head = self.render_onto_image(
             repo,
             img,

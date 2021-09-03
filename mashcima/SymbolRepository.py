@@ -7,61 +7,74 @@ from mashcima.Sprite import Sprite
 from mashcima.SpriteGroup import SpriteGroup
 import cv2
 import pickle
-import config
+from mashcima.Config import Config
+import tqdm
 
 
-MASHCIMA_CACHE_PATH = "mashcima-cache.pkl"
+def _restore_documents_from_cache(config: Config):
+    # if the cache exists, just restore them
+    if os.path.isfile(config.MUSCIMA_PP_DOCUMENTS_CACHE_PATH):
+        return pickle.load(open(config.MUSCIMA_PP_DOCUMENTS_CACHE_PATH, "rb"))
+
+    # else create the cache
+    print("Caching MUSCIMA++ documents...")
+    document_names = os.listdir(config.MUSCIMA_PP_CROP_OBJECT_DIRECTORY)
+    progress_bar = tqdm.tqdm(total=len(document_names), unit='doc', unit_scale=True)
+    documents = []
+    for i, doc in enumerate(document_names):
+        documents.append(
+            parse_cropobject_list(
+                os.path.join(config.MUSCIMA_PP_CROP_OBJECT_DIRECTORY, doc)
+            )
+        )
+        progress_bar.update()
+    pickle.dump(documents, open(config.MUSCIMA_PP_DOCUMENTS_CACHE_PATH, "wb"))
+    progress_bar.close()
+    print("Done.")
+    return documents
 
 
 class SymbolRepository:
+    DEFAULT_REPOSITORY = None
+
+    @staticmethod
+    def load_default():
+        """Loads or returns the default symbol repository, built from the default config"""
+        if SymbolRepository.DEFAULT_REPOSITORY is None:
+            SymbolRepository.DEFAULT_REPOSITORY = SymbolRepository()
+        return SymbolRepository.DEFAULT_REPOSITORY
+
     def __init__(
             self,
             documents: List[str] = None,
             take_writers: Optional[List[int]] = None,
             skip_writers: Optional[List[int]] = None,
-            use_cache: bool = False
+            use_cache: bool = False,
+            config=None
     ):
-        print("Loading mashcima...")
+        if config is None:
+            config = Config.load_default()
 
-        # default documents to load
-        if documents is None:
-            documents = [
-                os.path.join(config.MUSCIMA_PP_CROP_OBJECT_DIRECTORY, f)
-                for f in os.listdir(config.MUSCIMA_PP_CROP_OBJECT_DIRECTORY)
-            ]
-            # TODO: HACK: Limit document count
-            #documents = documents[:10]
+        # remember config so that others may access it
+        # through this instance
+        self.CONFIG = config
+
+        print("Loading symbols...")
 
         ##############################
         # Load and prepare MUSCIMA++ #
         ##############################
 
-        self.DOCUMENTS = []
+        self.DOCUMENTS =_restore_documents_from_cache(config)
 
-        # try to restore mashcima from cache since it's faster
-        was_restored = False
-        if os.path.isfile(MASHCIMA_CACHE_PATH) and use_cache:
-            was_restored = True
-            print("Restoring mashcima from cache...")
-            self.DOCUMENTS = pickle.load(open(MASHCIMA_CACHE_PATH, "rb"))
-            print("Restored %s documents." % (len(self.DOCUMENTS),))
+        # filter documents by exact nameset
+        if documents is not None:
+            self.DOCUMENTS = list(filter(
+                lambda d: d[0].doc + ".xml" in documents,
+                self.DOCUMENTS
+            ))
 
-        # all loaded crop object documents
-        if len(self.DOCUMENTS) == 0:
-            for i, doc in enumerate(documents):
-                print("Parsing document %d/%d ..." % (i + 1, len(documents)))
-                self.DOCUMENTS.append(
-                    parse_cropobject_list(
-                        os.path.join(config.MUSCIMA_PP_CROP_OBJECT_DIRECTORY, doc)
-                    )
-                )
-
-        # cache the loaded documents
-        if not was_restored and use_cache:
-            print("Caching mashcima in", MASHCIMA_CACHE_PATH)
-            pickle.dump(self.DOCUMENTS, open(MASHCIMA_CACHE_PATH, "wb"))
-
-        # filter documents
+        # filter documents by other conditions
         def _get_writer(document_name: str) -> int:
             m = re.search("^CVC-MUSCIMA_W-(\d+)", document_name)
             assert m is not None
@@ -207,7 +220,7 @@ class SymbolRepository:
         for key in self.TIME_MARKS:
             assert len(self.TIME_MARKS[key]) > 0
 
-        print("Mashcima loaded.")
+        print("Symbols loaded.")
 
 
 def _load_default_sprite_group(sprite_name: str, file_name: str) -> SpriteGroup:
