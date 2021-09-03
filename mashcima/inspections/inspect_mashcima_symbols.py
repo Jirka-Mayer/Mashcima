@@ -15,7 +15,7 @@ import numpy as np
 #     # "CVC-MUSCIMA_W-02_N-13_D-ideal.xml",
 #     # "CVC-MUSCIMA_W-02_N-17_D-ideal.xml",
 # ])
-repo = SymbolRepository(use_cache=True)
+repo = SymbolRepository()
 
 
 def inspect(items: List):

@@ -49,7 +49,6 @@ class SymbolRepository:
             documents: List[str] = None,
             take_writers: Optional[List[int]] = None,
             skip_writers: Optional[List[int]] = None,
-            use_cache: bool = False,
             config=None
     ):
         if config is None:

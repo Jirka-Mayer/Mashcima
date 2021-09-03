@@ -1,3 +1,4 @@
+from mashcima.CanvasOptions import CanvasOptions
 import numpy as np
 from typing import List, Optional
 from mashcima.vocabulary import get_pitch, to_generic
@@ -135,6 +136,9 @@ def multi_staff_annotation_to_image(
         main_annotation: str,
         above_annotation: Optional[str],
         below_annotation: Optional[str],
+        main_canvas_options: Optional[CanvasOptions] = None,
+        above_canvas_options: Optional[CanvasOptions] = None,
+        below_canvas_options: Optional[CanvasOptions] = None,
         min_width=0,  # keep some empty staff lines after the end
         crop_horizontally=True,
         crop_vertically=True,
@@ -168,6 +172,7 @@ def multi_staff_annotation_to_image(
         canvas = Canvas()
         canvas.options.barlines_up = False
         canvas.options.barlines_down = False
+        canvas.options.override_values_from(above_canvas_options)
         annotation_to_canvas(canvas, above_annotation)
         canvas.render_onto_image(
             repo, img,
@@ -179,6 +184,7 @@ def multi_staff_annotation_to_image(
     canvas = Canvas()
     canvas.options.barlines_up = above_annotation is not None
     canvas.options.barlines_down = below_annotation is not None
+    canvas.options.override_values_from(main_canvas_options)
     annotation_to_canvas(canvas, main_annotation)
     head_end = canvas.render_onto_image(
         repo, img,
@@ -191,6 +197,7 @@ def multi_staff_annotation_to_image(
         canvas = Canvas()
         canvas.options.barlines_up = False
         canvas.options.barlines_down = False
+        canvas.options.override_values_from(below_canvas_options)
         annotation_to_canvas(canvas, below_annotation)
         canvas.render_onto_image(
             repo, img,

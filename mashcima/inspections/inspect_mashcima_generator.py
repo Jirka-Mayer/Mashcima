@@ -12,7 +12,7 @@ repo = SymbolRepository([
     "CVC-MUSCIMA_W-01_N-14_D-ideal.xml",
     "CVC-MUSCIMA_W-01_N-19_D-ideal.xml",
 ])
-# repo = SymbolRepository(use_cache=True)
+# repo = SymbolRepository()
 
 
 def inspect(generator, samples=10):
