@@ -8,7 +8,7 @@ The upper image is taken from the [CVC-MUSCIMA dataset](http://www.cvc.uab.es/cv
 
 The aim of this tool is to provide abundant training data for researchers in the field of handwritten music recognition. It works by taking symbol masks from the [MUSCIMA++ dataset](https://ufal.mff.cuni.cz/muscima) \[2\] and placing them onto a blank staff according to a given annotation. This annotation may be your own, may be generated randomly, or may be taken from the [PrIMuS dataset](https://grfia.dlsi.ua.es/primus/) \[4\].
 
-> This tool is described in detail in the article *Synthesizing Training Data for Handwritten Music Recognition* \[1\] which can be downloaded here: `<not-yet-published>`
+> This tool is described in detail in the article *Synthesizing Training Data for Handwritten Music Recognition* \[1\] which can be downloaded here: https://doi.org/10.1007/978-3-030-86334-0_41
 >
 > The article describes various experiments. These experiments are part of the old repository: https://github.com/Jirka-Mayer/BachelorThesis
 
@@ -149,7 +149,7 @@ Both synthesizing functions (`synthesize_for_training` and `synthesize_for_beaut
 | `transform_image` | `True` | A random affine distortion may be applied to the rendered image. |
 | `symbol_repository` | `None` | The repository from which to obtain symbols. `None` stands for the default repository. |
 
-To learn more about the synthesis process, read the article: `<not-yet-published>`.
+To learn more about the synthesis process, read the article: https://doi.org/10.1007/978-3-030-86334-0_41
 
 
 ## Uninstallation
@@ -179,7 +179,7 @@ If you publish material based on this tool, we request you to include a referenc
 
 ## References
 
-\[1\] `<not-yet-published>` Jiří Mayer and Pavel Pecina. Synthesizing Training Data for Handwritten Music Recognition. *16th International Conference on Document Analysis and Recognition, ICDAR 2021.* Lausanne, September 8-10, pp. `<not-yet-known>`, 2021.
+\[1\] Jiří Mayer and Pavel Pecina. Synthesizing Training Data for Handwritten Music Recognition. *16th International Conference on Document Analysis and Recognition, ICDAR 2021.* Lausanne, September 8-10, pp. 626-641, 2021.
 
 \[2\] Jan Hajič jr. and Pavel Pecina. The MUSCIMA++ Dataset for Handwritten Optical Music Recognition. *14th International Conference on Document Analysis and Recognition, ICDAR 2017.* Kyoto, Japan, November 13-15, pp. 39-46, 2017.
 
